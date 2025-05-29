@@ -3,19 +3,30 @@ const User = require('./models/User');
 const UserSettings = require('./models/UserSettings');
 const Message = require('./models/Message');
 const Event = require('./models/Event');
+const { Server } = require('socket.io');
 
 let io;
 
 const initializeSocket = (server) => {
-  io = socketIO(server, {
+  io = new Server(server, {
     cors: {
-      origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
       methods: ["GET", "POST"],
-      credentials: true
+      credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"]
     },
     transports: ['websocket', 'polling'],
     pingTimeout: 60000,
-    pingInterval: 25000
+    pingInterval: 25000,
+    connectTimeout: 45000,
+    path: '/socket.io',
+    allowEIO3: true,
+    cookie: {
+      name: 'io',
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax'
+    }
   });
 
   // Replace the single socket ID map with a map of userId -> Set of socketIds

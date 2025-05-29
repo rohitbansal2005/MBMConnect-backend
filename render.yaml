@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: mbmconnect-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        value: https://mbmconnect.vercel.app
+      - key: BACKEND_URL
+        value: https://mbmconnect-backend.onrender.com
+      - key: PORT
+        value: 10000 
